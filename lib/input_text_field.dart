@@ -17,19 +17,19 @@ class InputTextField extends StatelessWidget {
         decimal: true,
       ),
       style: const TextStyle(
-        color: kHintStyleColor,
+        color: kPrimaryColor,
       ),
       decoration: const InputDecoration(
         hintText: "Enter your amount in USD",
         hintStyle: TextStyle(
-          color: kHintStyleColor,
+          color: kPrimaryColor,
         ),
         prefixIcon: Icon(
           Icons.attach_money,
-          color: kHintStyleColor,
+          color: kPrimaryColor,
         ),
         filled: true,
-        fillColor: kFilledColor,
+        fillColor: kSecondPrimaryColor,
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.all(
             Radius.circular(40),
