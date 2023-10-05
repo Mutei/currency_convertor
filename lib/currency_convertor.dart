@@ -62,7 +62,7 @@ class _CurrencyConvertorState extends State<CurrencyConvertor> {
                   value: value,
                   child: Text(
                     value,
-                    style: const TextStyle(color: kSecondPrimaryColor),
+                    style: const TextStyle(color: Colors.black87),
                   ),
                 );
               }).toList(),
