@@ -104,60 +104,72 @@ class _CurrencyConvertorState extends State<CurrencyConvertor> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kPrimaryColor,
-      body: SafeArea(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                padding: const EdgeInsets.only(right: 350),
-                child: IconButton(
-                  icon: const Icon(
-                    Icons.search,
-                    color: kSearchDialogueTextColors,
-                  ),
-                  onPressed: () {
-                    openSearchDialog(context);
-                  },
-                ),
-              ),
-              // Display the filtered currency list
-              SizedBox(
-                height: 100, // Set the desired height
-                child: ListView.builder(
-                  itemCount: filteredCurrencies.length,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Text(
-                        filteredCurrencies[index],
-                        style:
-                            const TextStyle(color: kSearchDialogueTextColors),
-                      ),
-                      onTap: () {
-                        setState(() {
-                          selectedCurrency = filteredCurrencies[index];
-                        });
-                      },
-                    );
-                  },
-                ),
-              ),
-              PaddingEnterAmount(controller: controller),
-              ElevatedButton(
-                onPressed: updateCurrency,
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(
-                    kSearchDialogueTextColors,
+      body: SingleChildScrollView(
+        child: SafeArea(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Hero(
+                  tag:
+                      'uniqueTag', // Make sure this tag matches the one in SplashScreen
+                  child: Image.asset(
+                    'images/logo.png',
+                    width: 200,
+                    height: 200,
                   ),
                 ),
-                child: const Text(
-                  "Convert",
-                  style: TextStyle(color: kSecondPrimaryColor),
+                Container(
+                  padding: const EdgeInsets.only(right: 350),
+                  child: IconButton(
+                    icon: const Icon(
+                      Icons.search,
+                      color: kSearchDialogueTextColors,
+                    ),
+                    onPressed: () {
+                      openSearchDialog(context);
+                    },
+                  ),
                 ),
-              ),
-              PaddingTotalValue(
-                  recentValue: recentValue, selectedCurrency: selectedCurrency),
-            ],
+                // Display the filtered currency list
+                SizedBox(
+                  height: 100, // Set the desired height
+                  child: ListView.builder(
+                    itemCount: filteredCurrencies.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        title: Text(
+                          filteredCurrencies[index],
+                          style:
+                              const TextStyle(color: kSearchDialogueTextColors),
+                        ),
+                        onTap: () {
+                          setState(() {
+                            selectedCurrency = filteredCurrencies[index];
+                          });
+                        },
+                      );
+                    },
+                  ),
+                ),
+                PaddingEnterAmount(controller: controller),
+                ElevatedButton(
+                  onPressed: updateCurrency,
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(
+                      kSearchDialogueTextColors,
+                    ),
+                  ),
+                  child: const Text(
+                    "Convert",
+                    style: TextStyle(color: kSecondPrimaryColor),
+                  ),
+                ),
+                PaddingTotalValue(
+                    recentValue: recentValue,
+                    selectedCurrency: selectedCurrency),
+              ],
+            ),
           ),
         ),
       ),
