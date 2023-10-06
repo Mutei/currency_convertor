@@ -22,11 +22,11 @@ class InputTextField extends StatelessWidget {
       decoration: const InputDecoration(
         hintText: "Enter your amount in USD",
         hintStyle: TextStyle(
-          color: kPrimaryColor,
+          color: kSearchDialogueTextColors,
         ),
         prefixIcon: Icon(
           Icons.attach_money,
-          color: kPrimaryColor,
+          color: kSearchDialogueTextColors,
         ),
         filled: true,
         fillColor: kSecondPrimaryColor,

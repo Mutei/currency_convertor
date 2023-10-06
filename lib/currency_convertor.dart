@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'constant.dart';
-import 'input_text_field.dart';
+import 'Padding/padding_enter_amount.dart';
 import 'url_function.dart';
 import 'list.dart';
 import 'Padding/padding_total_value.dart';
@@ -41,6 +41,65 @@ class _CurrencyConvertorState extends State<CurrencyConvertor> {
     });
   }
 
+  void openSearchDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: kPrimaryColor,
+          title: const Text(
+            'Search Currency',
+            style: TextStyle(
+              color: kSearchDialogueTextColors,
+            ),
+          ),
+          content: TextField(
+            decoration: const InputDecoration(
+              hintText: 'Enter a currency...',
+              hintStyle: TextStyle(
+                color: kSearchDialogueTextColors,
+              ),
+            ),
+            style: const TextStyle(
+              color: kSearchDialogueTextColors,
+            ),
+            onChanged: (value) {
+              setState(() {
+                searchText = value.toLowerCase();
+
+                filteredCurrencies =
+                    listLength.getCurrenciesList().where((currency) {
+                  return currency.toLowerCase().contains(searchText);
+                }).toList();
+              });
+            },
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                // Update the selected currency here
+                if (filteredCurrencies.isNotEmpty) {
+                  setState(() {
+                    selectedCurrency = filteredCurrencies[
+                        0]; // Update with the first item in the filtered list
+                  });
+                }
+                Navigator.of(context).pop();
+              },
+              child: const Text('Search'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancel'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,29 +109,15 @@ class _CurrencyConvertorState extends State<CurrencyConvertor> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: TextField(
-                  decoration: const InputDecoration(
-                    hintText: 'Enter a currency...',
-                    hintStyle: TextStyle(color: kPrimaryColor),
-                    filled: true,
-                    fillColor: kSecondPrimaryColor,
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(40),
-                      ),
-                    ),
+              Container(
+                padding: const EdgeInsets.only(right: 350),
+                child: IconButton(
+                  icon: const Icon(
+                    Icons.search,
+                    color: kSearchDialogueTextColors,
                   ),
-                  onChanged: (value) {
-                    setState(() {
-                      searchText = value.toLowerCase();
-                      // Filter the currency list based on the search text
-                      filteredCurrencies =
-                          listLength.getCurrenciesList().where((currency) {
-                        return currency.toLowerCase().contains(searchText);
-                      }).toList();
-                    });
+                  onPressed: () {
+                    openSearchDialog(context);
                   },
                 ),
               ),
@@ -85,7 +130,8 @@ class _CurrencyConvertorState extends State<CurrencyConvertor> {
                     return ListTile(
                       title: Text(
                         filteredCurrencies[index],
-                        style: const TextStyle(color: kListTileTextColors),
+                        style:
+                            const TextStyle(color: kSearchDialogueTextColors),
                       ),
                       onTap: () {
                         setState(() {
@@ -101,12 +147,12 @@ class _CurrencyConvertorState extends State<CurrencyConvertor> {
                 onPressed: updateCurrency,
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(
-                    kSecondPrimaryColor,
+                    kSearchDialogueTextColors,
                   ),
                 ),
                 child: const Text(
                   "Convert",
-                  style: TextStyle(color: kPrimaryColor),
+                  style: TextStyle(color: kSecondPrimaryColor),
                 ),
               ),
               PaddingTotalValue(
@@ -115,23 +161,6 @@ class _CurrencyConvertorState extends State<CurrencyConvertor> {
           ),
         ),
       ),
-    );
-  }
-}
-
-class PaddingEnterAmount extends StatelessWidget {
-  const PaddingEnterAmount({
-    super.key,
-    required this.controller,
-  });
-
-  final TextEditingController controller;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: InputTextField(controller: controller),
     );
   }
 }
@@ -183,37 +212,3 @@ class PaddingEnterAmount extends StatelessWidget {
 // },
 // ),
 // ),
-
-// void openSearchDialog(BuildContext context) {
-//   showDialog(
-//     context: context,
-//     builder: (BuildContext context) {
-//       return AlertDialog(
-//         title: const Text('Search Currency'),
-//         content: TextField(
-//           decoration: const InputDecoration(
-//             hintText: 'Enter a currency...',
-//           ),
-//           onChanged: (value) {
-//             setState(() {
-//               searchText = value.toLowerCase();
-//               // Filter the currency list based on the search text
-//               filteredCurrencies =
-//                   listLength.getCurrenciesList().where((currency) {
-//                 return currency.toLowerCase().contains(searchText);
-//               }).toList();
-//             });
-//           },
-//         ),
-//         actions: <Widget>[
-//           TextButton(
-//             onPressed: () {
-//               Navigator.of(context).pop();
-//             },
-//             child: Text('Cancel'),
-//           ),
-//         ],
-//       );
-//     },
-//   );
-// }

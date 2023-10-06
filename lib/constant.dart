@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
-const kPrimaryColor = Colors.blueGrey;
+const kPrimaryColor = Color(0xFF0A0E21);
 const kSecondPrimaryColor = Colors.white;
-const kListTileTextColors = Colors.black87;
+const kListTileTextColors = Colors.white;
+const kSearchDialogueTextColors = Colors.blue;

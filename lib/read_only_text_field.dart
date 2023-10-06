@@ -14,17 +14,11 @@ class MyReadOnlyTextField extends StatelessWidget {
     return TextField(
       readOnly: true,
       style: const TextStyle(
-        color: kPrimaryColor,
+        color: kSearchDialogueTextColors,
       ),
       decoration: const InputDecoration(
-        labelText: 'Total Value',
         filled: true,
         fillColor: kSecondPrimaryColor,
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(40),
-          ),
-        ),
       ),
       controller: TextEditingController(text: readOnlyText),
     );
