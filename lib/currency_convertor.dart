@@ -48,16 +48,16 @@ class _CurrencyConvertorState extends State<CurrencyConvertor> {
         return AlertDialog(
           backgroundColor: kPrimaryColor,
           title: const Text(
-            'Search Currency',
+            'Enter a Currency',
             style: TextStyle(
               color: kSearchDialogueTextColors,
             ),
           ),
           content: TextField(
             decoration: const InputDecoration(
-              hintText: 'Enter a currency...',
+              hintText: 'Ex: (SAR or Saudi Riyals) ',
               hintStyle: TextStyle(
-                color: kSearchDialogueTextColors,
+                color: Colors.grey,
               ),
             ),
             style: const TextStyle(
@@ -69,7 +69,11 @@ class _CurrencyConvertorState extends State<CurrencyConvertor> {
 
                 filteredCurrencies =
                     listLength.getCurrenciesList().where((currency) {
-                  return currency.toLowerCase().contains(searchText);
+                  return currency.toLowerCase().contains(searchText) ||
+                      listLength
+                          .getFullCurrencyName(currency)
+                          .toLowerCase()
+                          .contains(searchText);
                 }).toList();
               });
             },
@@ -104,6 +108,20 @@ class _CurrencyConvertorState extends State<CurrencyConvertor> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kPrimaryColor,
+      appBar: AppBar(
+        backgroundColor: kPrimaryColor,
+        actions: [
+          IconButton(
+            icon: const Icon(
+              Icons.search,
+              color: kSearchDialogueTextColors,
+            ),
+            onPressed: () {
+              openSearchDialog(context);
+            },
+          ),
+        ],
+      ),
       body: SingleChildScrollView(
         child: SafeArea(
           child: Center(
@@ -119,18 +137,7 @@ class _CurrencyConvertorState extends State<CurrencyConvertor> {
                     height: 200,
                   ),
                 ),
-                Container(
-                  padding: const EdgeInsets.only(right: 350),
-                  child: IconButton(
-                    icon: const Icon(
-                      Icons.search,
-                      color: kSearchDialogueTextColors,
-                    ),
-                    onPressed: () {
-                      openSearchDialog(context);
-                    },
-                  ),
-                ),
+
                 // Display the filtered currency list
                 SizedBox(
                   height: 100, // Set the desired height
@@ -138,21 +145,40 @@ class _CurrencyConvertorState extends State<CurrencyConvertor> {
                     itemCount: filteredCurrencies.length,
                     itemBuilder: (context, index) {
                       return ListTile(
-                        title: Text(
-                          filteredCurrencies[index],
-                          style:
-                              const TextStyle(color: kSearchDialogueTextColors),
-                        ),
-                        onTap: () {
-                          setState(() {
-                            selectedCurrency = filteredCurrencies[index];
+                          title: Text(
+                            filteredCurrencies[index],
+                            style: const TextStyle(
+                                color: kSearchDialogueTextColors),
+                          ),
+                          onTap: () {
+                            setState(() {
+                              // Check if the selected currency is a full name, and find its shortcut
+                              selectedCurrency = listLength
+                                  .getCurrenciesList()
+                                  .firstWhere(
+                                    (currency) =>
+                                        currency.toLowerCase() ==
+                                            filteredCurrencies[index]
+                                                .toLowerCase() ||
+                                        listLength
+                                                .getFullCurrencyName(currency)
+                                                .toLowerCase() ==
+                                            filteredCurrencies[index]
+                                                .toLowerCase(),
+                                    orElse: () =>
+                                        selectedCurrency, // Use the current selection if not found
+                                  );
+                            });
                           });
-                        },
-                      );
                     },
                   ),
                 ),
+
                 PaddingEnterAmount(controller: controller),
+
+                PaddingTotalValue(
+                    recentValue: recentValue,
+                    selectedCurrency: selectedCurrency),
                 ElevatedButton(
                   onPressed: updateCurrency,
                   style: ButtonStyle(
@@ -165,9 +191,6 @@ class _CurrencyConvertorState extends State<CurrencyConvertor> {
                     style: TextStyle(color: kSecondPrimaryColor),
                   ),
                 ),
-                PaddingTotalValue(
-                    recentValue: recentValue,
-                    selectedCurrency: selectedCurrency),
               ],
             ),
           ),
